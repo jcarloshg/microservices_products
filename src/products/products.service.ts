@@ -1,31 +1,36 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Product } from '@prisma/client';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { PrismaService } from 'src/common/prisma/prisma.service';
-import { Product } from '@prisma/client';
 import { PaginationDto } from 'src/common/dto';
+import { PrismaService } from 'src/common/prisma/prisma.service';
 
 @Injectable()
 export class ProductsService {
   private readonly _Logger: Logger = new Logger('ProductsService');
-
   constructor(private readonly prisma: PrismaService) {
     this._Logger.log('ProductsService initialized');
   }
-  async create(createProductDto: CreateProductDto): Promise<Product> {
-    const productCreated: Product = await this.prisma.product.create({
+
+  public async create(createProductDto: CreateProductDto): Promise<Product> {
+    const productCreated = await this.prisma.product.create({
       data: createProductDto,
     });
     return productCreated;
   }
 
   async findAll(paginationDto: PaginationDto) {
-    const totalProducts = await this.prisma.product.count();
+    const totalProducts = await this.prisma.product.count({
+      where: { available: true },
+    });
     const products = await this.prisma.product.findMany({
       skip: (paginationDto.page - 1) * paginationDto.limit,
       take: paginationDto.limit,
       orderBy: {
         createdAt: 'desc',
+      },
+      where: {
+        available: true,
       },
     });
     return {
@@ -41,6 +46,7 @@ export class ProductsService {
     const productFound = await this.prisma.product.findUnique({
       where: {
         id: id,
+        available: true,
       },
     });
 
@@ -67,10 +73,9 @@ export class ProductsService {
     }
   }
 
-  async remove(id: number) {
+  async remove(id: number): Promise<Product> {
     await this.findOne(id);
-
-    await this.prisma.product.update({
+    return this.prisma.product.update({
       where: { id },
       data: { available: false },
     });

@@ -14,13 +14,11 @@ export class PrismaService
   private readonly _logger: Logger = new Logger('PrismaService');
 
   async onModuleInit() {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     await this.$connect();
     this._logger.log('PrismaService initialized');
   }
 
   async onModuleDestroy() {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     await this.$disconnect();
     this._logger.log('PrismaService disconnected');
   }
