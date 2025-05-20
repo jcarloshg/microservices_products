@@ -4,7 +4,6 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { PrismaService } from 'src/common/prisma/prisma.service';
 import { Product } from '@prisma/client';
 import { PaginationDto } from 'src/common/dto';
-import { NotFoundError } from 'rxjs';
 
 @Injectable()
 export class ProductsService {
@@ -68,7 +67,12 @@ export class ProductsService {
     }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} product`;
+  async remove(id: number) {
+    await this.findOne(id);
+
+    await this.prisma.product.update({
+      where: { id },
+      data: { available: false },
+    });
   }
 }
