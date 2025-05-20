@@ -4,10 +4,44 @@ Microservice for product management, developed with NestJS, Prisma, and SQLite.
 
 ## 📑 Index
 
+- [Domain Driven Design](#domain-driven-design)
+
+  - [🧩 Domain](#-domain)
+  - [🏗️ Infrastructure](#-infrastructure)
+  - [🖥️ Application](#-application)
+
 - [⚙️ Useful Scripts (`package.json`)](#️-useful-scripts-packagejson)
+
   - [💻 Development Environment](#-development-environment)
   - [ℹ️ About Environment Variable Configuration](#️-about-environment-variable-configuration)
+
 - [🔗 Endpoints](#-endpoints)
+
+## Domain Driven Design
+
+This microservice applies Domain Driven Design (DDD) to structure its core logic, using entities, value objects, aggregates, services, and repositories for clear separation of concerns and scalability.
+
+### 🧩 Domain
+
+This is the core of the application.
+
+- [domain](src/useCases/domain)
+  - [entity](src/useCases/domain/entity)
+  - [repository](src/useCases/domain/repository)
+
+### 🏗️ Infrastructure
+
+Implements the business rules and technical details of the application.
+
+- [infrastructure](src/useCases/infrastructure)
+  - [sql-lite-prisma](src/useCases/infrastructure/sql-lite-prisma)
+
+### 🖥️ Application
+
+Implements different ways to manage data. In this specific case, only **SQLite** is used as the data storage solution.
+
+- [application](src/useCases/application)
+  - [manage-products](src/useCases/application/manage-products)
 
 ## ⚙️ Useful Scripts (`package.json`)
 
