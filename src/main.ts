@@ -1,10 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ValidationPipeInit } from './utils/main/ValidationPipeInit';
-import { envs } from './config/index';
+import { envs, ValidationPipeInit } from './common';
 
 async function bootstrap() {
-
   const app = await NestFactory.create(AppModule);
 
   app.useGlobalPipes(ValidationPipeInit);

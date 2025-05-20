@@ -2,8 +2,7 @@ import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { Product } from '@prisma/client';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { PaginationDto } from 'src/common/dto';
-import { PrismaService } from 'src/common/prisma/prisma.service';
+import { PaginationDto, PrismaService } from 'src/common';
 
 @Injectable()
 export class ProductsService {
