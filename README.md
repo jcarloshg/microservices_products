@@ -19,6 +19,8 @@ Microservice for product management, developed with NestJS, Prisma, and SQLite.
 
 ## Domain Driven Design
 
+- [Use Cases](src/useCases)
+
 This microservice applies Domain Driven Design (DDD) to structure its core logic, using entities, value objects, aggregates, services, and repositories for clear separation of concerns and scalability.
 
 ### 🧩 Domain
