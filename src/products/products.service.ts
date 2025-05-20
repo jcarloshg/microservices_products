@@ -1,8 +1,10 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { PrismaService } from 'src/common/prisma/prisma.service';
 import { Product } from '@prisma/client';
+import { PaginationDto } from 'src/common/dto';
+import { NotFoundError } from 'rxjs';
 
 @Injectable()
 export class ProductsService {
@@ -18,17 +20,52 @@ export class ProductsService {
     return productCreated;
   }
 
-  async findAll() {
-    const products = await this.prisma.product.findMany();
-    return products;
+  async findAll(paginationDto: PaginationDto) {
+    const totalProducts = await this.prisma.product.count();
+    const products = await this.prisma.product.findMany({
+      skip: (paginationDto.page - 1) * paginationDto.limit,
+      take: paginationDto.limit,
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+    return {
+      data: products,
+      metaData: {
+        totalProducts: totalProducts,
+        totalPages: Math.ceil(totalProducts / paginationDto.limit),
+      },
+    };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} product`;
+  async findOne(id: number): Promise<Product | null> {
+    const productFound = await this.prisma.product.findUnique({
+      where: {
+        id: id,
+      },
+    });
+
+    if (productFound === null)
+      throw new NotFoundException(`Product with id ${id} not found`);
+
+    return productFound;
   }
 
-  update(id: number, updateProductDto: UpdateProductDto) {
-    return `This action updates a #${id} product`;
+  async update(id: number, updateProductDto: UpdateProductDto) {
+    try {
+      const productUpdated = await this.prisma.product.update({
+        where: {
+          id: id,
+        },
+        data: {
+          ...updateProductDto,
+        },
+      });
+      return productUpdated;
+    } catch (error) {
+      this._Logger.error(`Error updating product with id ${id}`, error);
+      throw new NotFoundException(`Product with id ${id} not found`);
+    }
   }
 
   remove(id: number) {
