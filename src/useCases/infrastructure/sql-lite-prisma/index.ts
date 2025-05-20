@@ -1,3 +1,4 @@
+export * from './ConnectionSqlLitePrisma';
 export * from './CreateProduct.sql-lite-prisma';
 export * from './DeleteProductById.sql-lite-prisma';
 export * from './GetAllProducts.sql-lite-prisma';

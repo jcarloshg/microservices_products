@@ -1,11 +1,11 @@
-import { PrismaService } from 'src/common';
+import { PrismaClient } from '@prisma/client';
 import { ProductEntity } from 'src/useCases/domain/entity';
-import { GetProductByIdRepository } from 'src/useCases/domain/repository';
+import { GetProductByIdRepository } from 'src/useCases/domain/repository/manage-products';
 
 export class GetProductByIdSqlLite implements GetProductByIdRepository {
-  private readonly prisma: PrismaService;
+  private readonly prisma: PrismaClient;
 
-  constructor(_prisma: PrismaService) {
+  constructor(_prisma: PrismaClient) {
     this.prisma = _prisma;
   }
 
