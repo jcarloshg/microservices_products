@@ -7,22 +7,24 @@ import { Logger } from '@nestjs/common';
 async function bootstrap() {
   const logger = new Logger('main');
 
-  // const app = await NestFactory.create(AppModule);
-  const app = await NestFactory.createMicroservice<MicroserviceOptions>(
-    AppModule,
-    {
-      transport: Transport.TCP,
-      options: {
-        port: envs.PORT,
-      },
-    },
-  );
-
+  // Crear la app HTTP
+  const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(ValidationPipeInit);
-  // await app.listen(envs.PORT);
-  await app.listen();
 
-  logger.log(`Microservice - Products is running on port ${envs.PORT}`);
+  // Conectar microservicio TCP
+  app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.TCP,
+    options: {
+      port: envs.PORT_MICRO_SERVICE,
+    },
+  });
+
+  await app.startAllMicroservices();
+  await app.listen(envs.PORT_REST);
+
+  logger.log(
+    `Microservice - Products is running on port ${envs.PORT_REST} (HTTP & TCP)`,
+  );
 }
 
 bootstrap();
