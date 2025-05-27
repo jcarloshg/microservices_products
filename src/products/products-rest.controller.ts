@@ -14,7 +14,7 @@ import { UpdateProductDto } from './dto/update-product.dto';
 // import { PaginationDto } from 'src/common/dto';
 
 @Controller('products')
-export class ProductsController {
+export class ProductsRestController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Post()
