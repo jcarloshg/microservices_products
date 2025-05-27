@@ -20,11 +20,10 @@ async function bootstrap() {
   });
 
   await app.startAllMicroservices();
-  await app.listen(envs.PORT_REST);
+  console.log(`[microservice] -> TCP on port ${envs.PORT_MICRO_SERVICE}`);
 
-  logger.log(
-    `Microservice - Products is running on port ${envs.PORT_REST} (HTTP & TCP)`,
-  );
+  await app.listen(envs.PORT_REST);
+  logger.log(`[rest] -> HTTP on port ${envs.PORT_REST}`);
 }
 
 bootstrap();

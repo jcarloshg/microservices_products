@@ -4,6 +4,7 @@ Microservice for product management, developed with NestJS, Prisma, and SQLite.
 
 ## 📑 Index
 
+- [🚀 Architecture Overview](#-architecture-overview)
 - [Domain Driven Design](#domain-driven-design)
 
   - [🧩 Domain](#-domain)
@@ -16,6 +17,17 @@ Microservice for product management, developed with NestJS, Prisma, and SQLite.
   - [ℹ️ About Environment Variable Configuration](#️-about-environment-variable-configuration)
 
 - [🔗 Endpoints](#-endpoints)
+
+## 🚀 Architecture Overview
+
+This service starts **two servers** simultaneously:
+
+- **REST API**: Exposes HTTP endpoints for product management (see [Endpoints](#-endpoints)).
+- **TCP Microservice**: Listens for TCP messages, enabling integration with other microservices.
+
+Both servers are initialized in `src/main.ts` using NestJS. The ports for each are configured via environment variables (`PORT_REST` for HTTP, `PORT_MICRO_SERVICE` for TCP).
+
+A global validation pipe is applied to all incoming requests, ensuring data integrity and automatic validation of DTOs.
 
 ## Domain Driven Design
 
