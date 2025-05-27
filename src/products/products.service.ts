@@ -1,8 +1,14 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  HttpStatus,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { Product } from '@prisma/client';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ManageProductsService } from 'src/useCases/application/manage-products/manage-products.service';
+import { RpcException } from '@nestjs/microservices';
 
 @Injectable()
 export class ProductsService {
@@ -71,7 +77,11 @@ export class ProductsService {
       return productUpdated;
     } catch (error) {
       this._Logger.error(`Error updating product with id ${id}`, error);
-      throw new NotFoundException(`Product with id ${id} not found`);
+      // throw new NotFoundException(`Product with id ${id} not found`);
+      throw new RpcException({
+        message: `Product with id ${id} not found`,
+        status: HttpStatus.NOT_FOUND,
+      });
     }
   }
 
