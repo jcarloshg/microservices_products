@@ -17,7 +17,6 @@ const getEnvs = (): Envs => {
     PORT,
     DATABASE_URL,
   };
-  console.log(`[envs] -> `, envs);
 
   return envs;
 };
